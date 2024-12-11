@@ -41,4 +41,7 @@ class SignupForm(forms.ModelForm):
         if commit:
             user.save()
         return user 
-    
+
+
+class OTPVerificationForm(forms.Form):
+    otp = forms.CharField(max_length=6, label="Enter OTP")
