@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect
 from django.contrib import messages
@@ -35,6 +35,10 @@ class SignUpView(CreateView):
     template_name = "registration/signup.html"
     success_url = reverse_lazy("login")
 
+
+class LogoutView(LogoutView):
+    template_name = "accounts/logout.html"
+    success_url = reverse_lazy("home")
 
 def otp_verification_view(request):
     if request.method == 'POST':

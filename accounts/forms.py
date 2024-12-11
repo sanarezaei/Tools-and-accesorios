@@ -43,5 +43,6 @@ class SignupForm(forms.ModelForm):
         return user 
 
 
+
 class OTPVerificationForm(forms.Form):
     otp = forms.CharField(max_length=6, label="Enter OTP")
