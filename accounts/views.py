@@ -5,19 +5,15 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.detail import DetailView
+from django.shortcuts import get_object_or_404
 
-from .forms import UserCreationForm, AuthenticationForm, SignupForm, OTPVerificationForm
+from .forms import UserCreationForm, SignupForm, OTPVerificationForm
 from .models import OTP, CustomUser
-
-class SignUpView(CreateView):
-    form_class = UserCreationForm
-    success_url = reverse_lazy('login')
-    template_name = "registration/signup.html"
-    
-    
-class PhoneNumberLoginView(LoginView):
+      
+class LoginView(LoginView):
     template_name = 'registration/login.html'
-    authentication_form = AuthenticationForm
     
     def form_valid(self, form):
         phone_number = form.cleaned_data.get("phone_number")
@@ -35,10 +31,6 @@ class SignUpView(CreateView):
     template_name = "registration/signup.html"
     success_url = reverse_lazy("login")
 
-
-class LogoutView(LogoutView):
-    template_name = "accounts/logout.html"
-    success_url = reverse_lazy("home")
 
 def otp_verification_view(request):
     if request.method == 'POST':
@@ -72,3 +64,12 @@ def register_view(request):
         messages.info(request, "An OTP has been sent to your phone.")
         return redirect("otp_verification") 
     return render(request, "register/signup.html")
+
+
+class ProfileView(LoginRequiredMixin, DetailView):
+    template_name = 'accounts/profile.html'
+    model = CustomUser
+    context_object_name = "user"
+    
+    def get_object(self):
+        return get_object_or_404(self.request, pk=self.request.user.pk)

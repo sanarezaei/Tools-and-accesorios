@@ -5,6 +5,8 @@ from django.utils.timezone import now
 
 from .managers import CustomUserManager
 
+import random
+
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField(max_length=15, unique=True)
     username = models.CharField(max_length=150, unique=True)
@@ -20,10 +22,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.phone_number
 
-User = get_user_model()
 
 class OTP(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="otp")
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="otp")
     otp_code = models.CharField(max_length=6)
     created_at = models.DateTimeField(default=True)
     
