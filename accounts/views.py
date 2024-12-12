@@ -8,7 +8,6 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.detail import DetailView
 from django.shortcuts import get_object_or_404
-
 from .forms import UserCreationForm, SignupForm, OTPVerificationForm
 from .models import OTP, CustomUser
       
@@ -72,4 +71,4 @@ class ProfileView(LoginRequiredMixin, DetailView):
     context_object_name = "user"
     
     def get_object(self):
-        return get_object_or_404(self.request, pk=self.request.user.pk)
+        return get_object_or_404(CustomUser, pk=self.request.user.pk)
