@@ -4,6 +4,6 @@ Home Page
 {% if request.user.is_authenticated %}
     <form action="{% url 'accounts:logout' %}">
         {% csrf_token %}
-        <button type="submit">Logout</button>
+        <button type="submit">logout</button>
     </form>
 {% endif %}
