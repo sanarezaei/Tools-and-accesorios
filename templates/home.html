@@ -2,7 +2,7 @@ Home Page
 <p><strong>Welcome </strong>{{ user.username }}</p>
 
 {% if request.user.is_authenticated %}
-    <form action="{% url 'accounts:logout' %}">
+    <form method="post" action="{% url 'accounts:logout' %}">
         {% csrf_token %}
         <button type="submit">logout</button>
     </form>

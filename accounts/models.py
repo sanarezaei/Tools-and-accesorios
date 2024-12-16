@@ -7,6 +7,7 @@ from .managers import CustomUserManager
 
 import random
 
+
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField(max_length=15, unique=True)
     username = models.CharField(max_length=150, unique=True)
@@ -24,9 +25,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 
 class OTP(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="otp")
+    phone_number = models.CharField(max_length=15, unique=True)
     otp_code = models.CharField(max_length=6)
-    created_at = models.DateTimeField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     
     def is_valid(self):
         return (now() - self.created_at).total_seconds() < 300 

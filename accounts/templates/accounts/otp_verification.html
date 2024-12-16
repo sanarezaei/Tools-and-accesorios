@@ -4,16 +4,9 @@
 
 {% block content %}
     <h1>Verify your account</h1>
-    <form action="" method="post">
+    <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Verify">
     </form>
-    {% if messages %}
-        <ul>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
 {% endblock content %}

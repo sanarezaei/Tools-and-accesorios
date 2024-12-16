@@ -1,8 +1,10 @@
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm
+from django.contrib.auth.forms import  UserChangeForm, AuthenticationForm
 from django.contrib.auth import get_user_model
 from django import forms
+from django.core.exceptions import ValidationError
 
 from .models import CustomUser, Address
+
 
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
@@ -17,12 +19,18 @@ class PhoneNumberLoginForm(forms.Form):
 
 class SignupForm(forms.ModelForm):
     password1 = forms.CharField(label="Password", widget=forms.PasswordInput)
-    password2 = forms.CharField(label= "Confirm Password", widget=forms.PasswordInput)
+    password2 = forms.CharField(label="Confirm Password", widget=forms.PasswordInput)
     
     class Meta:
         model = get_user_model()
         fields = ("phone_number", "username", "email")
-        
+    
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if CustomUser.objects.filter(username=username).exists():
+            raise ValidationError("A user with this username already exists.")
+        return username
+       
     def clean_password2(self): 
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
