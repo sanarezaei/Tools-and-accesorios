@@ -33,7 +33,7 @@ class OTP(models.Model):
         return (now() - self.created_at).total_seconds() < 300 
     
     def generate_otp(self):
-        self.otp_code = f"{random.randint(100000, 999999)}"
+        self.otp_code = str(random.randint(100000, 999999))
         self.save()
 
 

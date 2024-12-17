@@ -4,12 +4,12 @@ from .models import CustomUser, OTP, Address
 
 class CustomUserAdmin(UserAdmin):
     # Fields to display in the admin panel
-    list_display = ('phone_number', 'is_staff', 'is_superuser', 'is_active')
+    list_display = ('email', 'username', 'phone_number', 'is_staff', 'is_superuser', 'is_active')
     list_filter = ('is_staff', 'is_superuser', 'is_active')
 
     # Fields for adding and editing users
     fieldsets = (
-        (None, {'fields': ('phone_number', 'password')}),
+        (None, {'fields': ('email', 'username', 'phone_number', 'password')}),
         ('Permissions', {'fields': ('is_staff', 'is_superuser', 'is_active', 'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login',)}),
     )
