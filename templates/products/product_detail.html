@@ -1,0 +1,14 @@
+{% extends "_base.html" %}
+
+{% block page_title %}Product Details{% endblock page_title %}
+
+{% block content %}
+    <h1>{{ product.name }}</h1>
+    <p>Category: {{ product.category }}</p>
+    <p>Brand: {{ product.brand }}</p>
+    <p>Description: {{ product.description }}</p>
+    <p>Product Price: {{ product.price }}</p>
+    <p>Quantity: {{ product.quantity }}</p>
+    <button><a href="{% url "products:product_update" pk=product.pk %}">Edit</a></button>
+    <button><a href="{% url "products:product_delete" pk=product.pk %}">Delete</a></button>
+{% endblock content %}

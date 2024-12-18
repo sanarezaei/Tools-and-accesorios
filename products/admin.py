@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, Brand, ProductFeature
+from .models import Category, Brand, ProductFeature, Product
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -26,7 +26,15 @@ class BrandAdmin(admin.ModelAdmin):
 
 @admin.register(ProductFeature)
 class ProductFeatureAdmin(admin.ModelAdmin):
-    list_display = ("product", "key", "value", "created_at", "updated_at")
-    list_filter = ("product", "key", "created_at")
+    list_display = ("product", "key", "value")
+    list_filter = ("product", "key", )
     search_fields = ("product", "key", "value")
-    ordering = ["-created_at"]
+
+
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ("name", "category", "brand", "price", "quantity", "active")
+    search_fields = ("name", "active")
+    list_filter = ("category", "brand", "active")
+    ordering = ("name",)
+     

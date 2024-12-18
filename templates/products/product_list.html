@@ -1,0 +1,16 @@
+{% extends "_base.html" %}
+
+{% block page_title %}Product List{% endblock page_title %}
+
+{% block content %}
+    <button><a href="{% url "products:product_create" %}">Add New Product</a></button>
+    <ul>
+        {% for Product in products %}
+            <li>
+                <a href="{% url 'products:product_detail' pk=product.pk %}">{{ product.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock content %}
+
+{% comment %} - ${{ product.price }} {% endcomment %}
