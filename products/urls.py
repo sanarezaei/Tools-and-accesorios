@@ -20,9 +20,9 @@ urlpatterns = [
     path("brands/<int:pk>/update/", BrandUpdateView.as_view(), name="brand_update"),
     path("brands/<int:pk>/delete/", BrandDeleteView.as_view(), name="brand_delete"),
     # Product
-    path("products", ProductListView.as_view(), name="product_list"),
-    path("products/<int:pk>/", ProductDetailView.as_view(), name="product_detail"),
-    path("products/create/", ProductCreateView.as_view(), name="product_create"), 
-    path("products/<int:pk>/update/", ProductUpdateView.as_view(), name="product_update"),
-    path("products/<int:pk>/delete/", ProductDeleteView.as_view(), name="product_delete"),
+    path("", ProductListView.as_view(), name="product_list"),
+    path("<int:id>/", ProductDetailView.as_view(), name="product_detail"),
+    path("create/", ProductCreateView.as_view(), name="product_create"), 
+    path("<int:pk>/update/", ProductUpdateView.as_view(), name="product_update"),
+    path("<int:pk>/delete/", ProductDeleteView.as_view(), name="product_delete"),
 ]

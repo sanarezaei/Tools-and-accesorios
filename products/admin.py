@@ -26,9 +26,9 @@ class BrandAdmin(admin.ModelAdmin):
 
 @admin.register(ProductFeature)
 class ProductFeatureAdmin(admin.ModelAdmin):
-    list_display = ("product", "key", "value")
-    list_filter = ("product", "key", )
-    search_fields = ("product", "key", "value")
+    list_display = ("product",)
+    list_filter = ("product", )
+    search_fields = ("product",)
 
 
 @admin.register(Product)
