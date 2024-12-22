@@ -26,7 +26,7 @@ class Product(models.Model):
     brand = models.ForeignKey(Brand, on_delete=models.PROTECT, blank=True, null=True)
     name = models.CharField(max_length=100)
     description = models.TextField()
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    price = models.PositiveIntegerField()
     quantity = models.PositiveIntegerField(default=0)
     discount = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
     active = models.BooleanField()
@@ -36,14 +36,14 @@ class Product(models.Model):
         return self.name
 
     def is_exists(self):
-        if quantity == 0:
+        if self.quantity == 0:
             return f"None exists"
 
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="images")
-    alt_text = models.CharField(max_length=255, blank=True, null=True)
-    
+    image = models.ImageField(upload_to="product_images/")
+
     def __str__(self):
         return f"{self.product.name} - {self.id}"
     
@@ -61,8 +61,7 @@ class ProductFeature(models.Model):
     
     def __str__(self):
         return f"Features of {self.product.name}" if self.product else "Unassigned Product Features"
-    
-    
+
     class Meta:
         verbose_name = "Product Feature"
         verbose_name_plural = "Product Features"

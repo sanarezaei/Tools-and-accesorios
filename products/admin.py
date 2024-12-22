@@ -1,6 +1,15 @@
 from django.contrib import admin
 
-from .models import Category, Brand, ProductFeature, Product
+from .models import Category, Brand, ProductFeature, Product, ProductImage
+
+
+class ImageInline(admin.TabularInline):
+    model = ProductImage
+    extra = 1
+
+class ProductFeatureInline(admin.StackedInline):
+    model = ProductFeature
+
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -37,4 +46,4 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ("name", "active")
     list_filter = ("category", "brand", "active")
     ordering = ("name",)
-     
+    inlines = (ImageInline, ProductFeatureInline)
