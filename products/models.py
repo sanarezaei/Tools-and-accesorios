@@ -1,12 +1,17 @@
 from django.db import models
+from django.template.defaultfilters import slugify
+
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
+
+from autoslug import AutoSlugField
 
 import random
 
 class Category(MPTTModel):
     parent = TreeForeignKey("self", blank=True, null=True, on_delete=models.SET_NULL, related_name="Children")
     name = models.CharField(max_length=100)
+    slug = AutoSlugField(populate_from="name", unique=True)
     image = models.ImageField(upload_to="category_images/", blank=True, null=True)
 
     def __str__(self):
@@ -26,7 +31,7 @@ class Product(models.Model):
     brand = models.ForeignKey(Brand, on_delete=models.PROTECT, blank=True, null=True)
     name = models.CharField(max_length=100)
     description = models.TextField()
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    price = models.PositiveIntegerField()
     quantity = models.PositiveIntegerField(default=0)
     discount = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
     active = models.BooleanField()
@@ -37,12 +42,21 @@ class Product(models.Model):
 
     def is_exists(self):
         if quantity == 0:
-            return f"None exists"
+            return False
+        return True
+    
+    def check_quantity(self, number):
+        return self.quantity >= number
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
 
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="images")
-    alt_text = models.CharField(max_length=255, blank=True, null=True)
+    image = models.ImageField(upload_to="product_images/")
     
     def __str__(self):
         return f"{self.product.name} - {self.id}"
@@ -61,8 +75,7 @@ class ProductFeature(models.Model):
     
     def __str__(self):
         return f"Features of {self.product.name}" if self.product else "Unassigned Product Features"
-    
-    
+
     class Meta:
         verbose_name = "Product Feature"
         verbose_name_plural = "Product Features"

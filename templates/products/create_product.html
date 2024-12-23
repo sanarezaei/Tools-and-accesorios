@@ -1,0 +1,23 @@
+{% extends "_base.html" %}
+
+{% block page_title %}Create Product{% endblock page_title %}
+
+{% block content %}
+    <form action="" method="post">
+        {% csrf_token %}
+
+        <h2>Product Information</h2>
+        {{ product_form.as_p }}
+
+        <h2>Product Images</h2>
+        {{ image_formset.management_form }}
+        {% for form in image_formset %}
+            {{ form.as_p }}
+        {% endfor %}
+
+        <h2>Product Features</h2>
+        {{ feature_form.as_p }}
+
+        <button type="submit">Save</button>
+    </form>
+{% endblock content %}
