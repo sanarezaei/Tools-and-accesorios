@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth import get_user_model
 from django.utils.timezone import now
+from django.core.validators import RegexValidator
 
 from .managers import CustomUserManager
 
@@ -9,7 +10,11 @@ import random
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    phone_number = models.CharField(max_length=15, unique=True)
+    phone_number = models.CharField(max_length=11, unique=True, validators=[
+        RegexValidator(regex=r"09\d{9}$", 
+                       message="The phone number should start with 09 and be exactly 11 digits.",
+                       code="invalid_phone_number")
+    ])
     username = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True)
     is_active = models.BooleanField(default=True)
@@ -25,7 +30,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 
 class OTP(models.Model):
-    phone_number = models.CharField(max_length=15, unique=True)
+    phone_number = models.CharField(max_length=11, unique=True, validators=[
+        RegexValidator(regex=r"09\d{9}$", 
+                       message="The phone number should start with 09 and be exactly 11 digits.",
+                       code="invalid_phone_number")
+    ])
     otp_code = models.CharField(max_length=6)
     created_at = models.DateTimeField(auto_now_add=True)
     

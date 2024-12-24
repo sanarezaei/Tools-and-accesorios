@@ -37,6 +37,7 @@ class BrandAdmin(admin.ModelAdmin):
 class ProductFeatureAdmin(admin.ModelAdmin):
     list_display = ("product",)
     list_filter = ("product", )
+    
     search_fields = ("product",)
 
 
@@ -44,6 +45,6 @@ class ProductFeatureAdmin(admin.ModelAdmin):
 class ProductAdmin(admin.ModelAdmin):
     list_display = ("name", "category", "brand", "price", "quantity", "active")
     search_fields = ("name", "active")
-    list_filter = ("category", "brand", "active")
+    list_filter = ("category", "brand", "active", "created_at")
     ordering = ("name",)
     inlines = (ImageInline, ProductFeatureInline)

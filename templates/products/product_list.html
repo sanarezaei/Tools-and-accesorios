@@ -3,7 +3,17 @@
 {% block page_title %}Product List{% endblock page_title %}
 
 {% block content %}
-    <button><a href="{% url "products:product_create" %}">Add New Product</a></button>
+    <!-- Filter form-->
+    <form action="" method="get">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Filter</button>
+    </form>
+
+    <button>
+        <a href="{% url "products:product_create" %}">Add New Product</a>
+    </button>
+    <!-- Product list -->
     <ul>
         {% for product in products %}
             <li>
@@ -11,6 +21,25 @@
             </li>
         {% endfor %}
     </ul>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if product.has_previous %}
+                <a href="?page1">First</a>
+                <a href="?page={{ products.previous_page_number }}">Previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ products.number }} of {{ products.paginator.num_pages }}
+            </span>
+
+            {% if product.has_next %}
+                <a href="?page={{ products.next_page_number }}">Next</a>
+                <a href="?page={{ products.paginator.num_pages }}">Last</a>
+            {% endif %}
+
+        </span>
+    </div>
 {% endblock content %}
 
-{% comment %} - ${{ product.price }} {% endcomment %}
