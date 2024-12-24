@@ -16,6 +16,7 @@ import django_filters
 
 
 class ProductFilter(django_filters.FilterSet):
+    name = django_filters.CharFilter(field_name="name", lookup_expr="icontains", label="Name")
     category = django_filters.CharFilter(field_name="category__name", lookup_expr="icontains", label="Category")
     price_min = django_filters.NumberFilter(field_name="price", lookup_expr="gte", label="Min Price")
     price_max = django_filters.NumberFilter(field_name="price", lookup_expr="lte", label="Max Price")
