@@ -36,5 +36,5 @@ ProductImageFormSet = inlineformset_factory(
 class ProductFeatureForm(forms.ModelForm):
     class Meta:
         model = ProductFeature
-        fields = ["product", "material", "engine_type", "battery_voltage", "battery_type", "number_of_speeds", "charging_time", "weight", "height"]
+        fields = ["material", "engine_type", "battery_voltage", "battery_type", "number_of_speeds", "charging_time", "weight", "height"]
     

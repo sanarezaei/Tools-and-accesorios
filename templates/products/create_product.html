@@ -3,7 +3,7 @@
 {% block page_title %}Create Product{% endblock page_title %}
 
 {% block content %}
-    <form action="" method="post">
+    <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
         <h2>Product Information</h2>
