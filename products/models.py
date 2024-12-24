@@ -3,10 +3,10 @@ from django.template.defaultfilters import slugify
 
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
-
 from autoslug import AutoSlugField
 
 import random
+
 
 class Category(MPTTModel):
     parent = TreeForeignKey("self", blank=True, null=True, on_delete=models.SET_NULL, related_name="Children")
@@ -42,7 +42,7 @@ class Product(models.Model):
         return self.name
 
     def is_exists(self):
-        if quantity == 0:
+        if self.quantity == 0:
             return False
         return True
     

@@ -3,11 +3,11 @@
 {% block page_title %}Create Product{% endblock page_title %}
 
 {% block content %}
-    <form action="" method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
         <h2>Product Information</h2>
-        {{ product_form.as_p }}
+        {{ form.as_p }}
 
         <h2>Product Images</h2>
         {{ image_formset.management_form }}
