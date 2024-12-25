@@ -11,11 +11,11 @@ class ProductForm(forms.ModelForm):
         model = Product
         fields = ["category", "brand", "name", "description", "price", "quantity", "discount", "active", "slug"]
         
-        def clean_slug(self):
-            slug = self.cleaned_data.get("slug")
-            if slug and Product.objects.filter(slug=slug).exists():
-                raise ValidationError("This slug is already in use. Please choose another.")
-            return slug
+    def clean_slug(self):
+        slug = self.cleaned_data.get("slug")
+        if slug and Product.objects.filter(slug=slug).exists():
+            raise ValidationError("This slug is already in use. Please choose another.")
+        return slug
 
 
 class ProductImageForm(forms.ModelForm):
@@ -36,5 +36,6 @@ ProductImageFormSet = inlineformset_factory(
 class ProductFeatureForm(forms.ModelForm):
     class Meta:
         model = ProductFeature
-        fields = ["material", "engine_type", "battery_voltage", "battery_type", "number_of_speeds", "charging_time", "weight", "height"]
+        fields = ["material", "engine_type", "battery_voltage", "battery_type",
+                  "number_of_speeds", "charging_time", "weight", "height"]
     

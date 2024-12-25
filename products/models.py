@@ -42,7 +42,7 @@ class Product(models.Model):
         return self.name
 
     def is_exists(self):
-        if quantity == 0:
+        if self.quantity == 0:
             return False
         return True
     
