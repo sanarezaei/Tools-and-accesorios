@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     #internal app 
     'accounts', 
     'pages',
-    'products', 
+    'products',
+    'order',
     'mptt',
 ]
 

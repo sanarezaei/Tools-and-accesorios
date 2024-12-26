@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+
+
+{% for p_id, values in carts.items %}
+    </br>
+    {{ p_id }}<a href="{% url 'order:remove_from_cart' p_id %}">Remove</a>
+    </br>
+
+    {% for key, value in values.items %}
+    </br>
+
+        {{ key }}: {{ value }}
+    </br>
+
+    {% endfor %}
+
+{% endfor %}
+
+
+
+</body>
+</html>
