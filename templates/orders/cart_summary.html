@@ -1,0 +1,27 @@
+{% extends "_base.html" %}
+
+{% block page_title %}Cart Summary{% endblock page_title %}
+
+{% block content %}
+    <h1>Cart Summary</h1>
+    <ul>
+        {% for product in cart_products %}
+            <li>
+                {{ product.name }} - {{ quantities }} x  
+                {{ product.price }}
+                <form action="{% url 'orders:cart_delete' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                    <button type="submit">Remove</button>
+                </form>
+                <form action="{% url 'cart_update' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="product_id" value="{{ product.id}}">
+                    <input type="number" name="product_qyt" value="{{ quantities }}" min="1">
+                    <button type="submit">Update Quantity</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+    <p>Total: {{ totals }}</p>
+{% endblock content %}

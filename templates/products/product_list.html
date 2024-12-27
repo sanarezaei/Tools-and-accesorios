@@ -18,6 +18,7 @@
         {% for product in products %}
             <li>
                 <a href="{% url "products:product_detail" product.id %}">{{ product.name }}</a>
+                <button><a href="{% url 'orders:cart_add' %}">Add to Cart</a></button>
             </li>
         {% endfor %}
     </ul>

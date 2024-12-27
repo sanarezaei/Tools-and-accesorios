@@ -4,20 +4,24 @@ from django.shortcuts import get_object_or_404, redirect
 
 from .cart import Cart
 
+
 def cart_summary(request):
     # get the cart
     cart = Cart(request)
-    cart_request = cart.get_products
+    cart_products = cart.get_products
     quantities = cart.get_quantities
-    total = cart.total
-    return render(request, "cart_summary.html", 
-                  {"cart_products: ": cart_products},
-                  {"quantities: ": quantities},
-                  {"totals: ": totals},)
+    totals = cart.cart_total()
+    return render(request, "orders/cart_summary.html", 
+                  {"cart_products": cart_products(),
+                  "quantities": quantities(),
+                  "totals": totals,
+                  })
 
 def cart_add(request):
     # Get the cart
     cart = Cart(request)
+    # initialize response to avoid undefined errors
+    response = {"error": "Invalid request"}
     # test for POST
     if request.POST.get("action") == "post":
         # get stuff
@@ -30,9 +34,9 @@ def cart_add(request):
         # get cart quantity
         cart_quantity = cart.__len__()
         
-        # return response
         # response = JsonResponse({"Product Name: ": product.name})
-        response = JsonResponse({"quantity: ": cart_quantity})
+        response = {"quantity": cart_quantity}
+    return JsonResponse(response)
         
 def cart_delete(request):
     cart = Cart(request)
@@ -59,3 +63,4 @@ def cart_update(request):
         response = JsonResponse({"qty": product_qty})
         return response
 
+    
