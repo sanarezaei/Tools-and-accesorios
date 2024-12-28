@@ -1,0 +1,13 @@
+{% extends "_base.html" %}
+
+{% block page_title %}Delete Cart{% endblock page_title %}
+
+{% block content %}
+    <h1>Delete a Product From Cart</h1>
+    <form action="{% url 'orders:cart_delete' %} method="POST">
+        {% csrf_token %}
+        <label for="product_id">Product ID: </label>
+        <input type="number" name="product_id" id="product_id" required>
+        <button type="submit">Delete from cart</button>
+    </form>
+{% endblock content %}
