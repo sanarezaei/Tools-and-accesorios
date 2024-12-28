@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
+from django.views import View
 
 from .cart import Cart
 
@@ -63,4 +64,3 @@ def cart_update(request):
         response = JsonResponse({"qty": product_qty})
         return response
 
-    

@@ -80,3 +80,26 @@ class ProductFeature(models.Model):
     class Meta:
         verbose_name = "Product Feature"
         verbose_name_plural = "Product Features"
+
+
+class ApprovedCommentManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(status=Comment.COMMENTS_STATUS_APPROVED)
+
+
+class Comment(models.Model):
+    COMMENTS_STATUS_WRITING = 'writing'
+    COMMENTS_STATUS_APPROVED = 'approved'
+    COMMENTS_STATUS_NOT_APPROVED = 'not_approved'
+    COMMENTS_STATUS = [
+        (COMMENTS_STATUS_WRITING, "w"),
+        (COMMENTS_STATUS_APPROVED, "a"),
+        (COMMENTS_STATUS_NOT_APPROVED, "na"),
+    ]   
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="comments")
+    name = models.CharField(max_length=255)
+    body = models.TextField()
+    status = models.CharField(max_length=12, choices=COMMENTS_STATUS, default=COMMENTS_STATUS_WRITING)
+    created_at = models.DateTimeField(auto_now_add=True)
+    objects = models.Manager()
+    approve = ApprovedCommentManager()
