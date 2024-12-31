@@ -4,6 +4,9 @@
 
 {% block content %}
     <!-- Filter form-->
+
+
+
     <form action="" method="get">
         {% csrf_token %}
         {{ form.as_p }}
@@ -14,14 +17,27 @@
         <a href="{% url "products:product_create" %}">Add New Product</a>
     </button>
     <!-- Product list -->
+
+
+
+{#<form action="{% url 'orders:cart_add' %}" method="post">#}
+{#{% csrf_token %}#}
     <ul>
         {% for product in products %}
             <li>
                 <a href="{% url "products:product_detail" product.id %}">{{ product.name }}</a>
-                <button><a href="{% url 'orders:cart_add' %}">Add to Cart</a></button>
+                <a href="{% url 'orders:cart_add' product.id %}">Add to cart</a>
+{#                <input type="hidden" name="product_id" value="{{ product.id}}">#}
+{#                <button type="submit">Add to cart</button>#}
             </li>
         {% endfor %}
     </ul>
+{#</form>#}
+
+
+
+
+
 
     <!-- Pagination -->
     {% if is_paginated %}

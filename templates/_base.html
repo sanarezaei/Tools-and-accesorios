@@ -6,6 +6,11 @@
     {% block page_title %}<title></title>{% endblock page_title %}
 </head>
 <body>
+{% for msg in messages %}
+
+{{ msg }}
+
+{% endfor %}
     {% block content %}{% endblock content %}
 </body>
 </html>
