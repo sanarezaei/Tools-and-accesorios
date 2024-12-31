@@ -3,11 +3,13 @@ from django.views.generic import  CreateView, FormView
 from django.views.generic.detail import DetailView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views import View
+from django.shortcuts import get_object_or_404
 
 from django_filters.views import FilterView
 
-from .forms import ProductForm, ProductFeatureForm, ProductImageForm, ProductImageFormSet
-from .models import Product, Category, Brand, ProductImage
+from .forms import ProductForm, ProductFeatureForm, ProductImageForm, ProductImageFormSet, CommentForm
+from .models import Product, Category, Brand, ProductImage, Comment
 from .filters import ProductFilter
 
 
@@ -75,3 +77,27 @@ class ProductDetailView(DetailView):
     success_url = reverse_lazy("products:product_list")
     slug_field = "slug"
     slug_url_kwarg = "slug"
+
+
+class CommentListView(View):
+    def get(self, request, pk):
+        product = get_object_or_404(Product, pk=pk)
+        comments = Comments.approve.all()
+        return render(request, "products/comment_list.html", {"product": product, "comments": comments})
+
+
+class CommentCreateView(View):
+    def get(self, request, pk):
+        product = get_object_or_404(Product, pk=pk)
+        form = CommentForm()
+        return render(request, "products/comment_form.html", {"form": form, "product": product})
+    
+    def post(self, request, pk):
+        product = get_object_or_404(Product, pk=pk)
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.product = product
+            comment.save()
+            return redirect("products:comment_list", pk=pk)
+        return render(request, "products/comment_form.html", {"form": form, "product": product})

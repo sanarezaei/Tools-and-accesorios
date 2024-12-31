@@ -9,4 +9,9 @@
     <p>Description: {{ product.description }}</p>
     <p>Product Price: {{ product.price }}</p>
     <p>Quantity: {{ product.quantity }}</p>
+    <br>
+    <br>
+    <button type="submit">
+        <a href="{% url "products:comment_list" product.id %}">Add Comment</a>
+    </button>
 {% endblock content %}

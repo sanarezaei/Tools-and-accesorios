@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy
 
 from datetime import datetime, timedelta
 
-from .models import Category, Brand, ProductFeature, Product, ProductImage
+from .models import Category, Brand, ProductFeature, Product, ProductImage, Comment
 
 
 class ImageInline(admin.TabularInline):
@@ -69,3 +69,9 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ("category", "brand", "active", CustomDateFilter)
     ordering = ("name",)
     inlines = [ProductFeatureInline, ImageInline]
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ("name", "body", "product")
+    list_filter = ("created_at",)

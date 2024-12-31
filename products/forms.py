@@ -3,7 +3,13 @@ from django.utils.text import slugify
 from django.core.exceptions import ValidationError
 from django.forms import inlineformset_factory
 
-from .models import ProductFeature, Product, Brand, Category, ProductImage
+from .models import ProductFeature, Product, Brand, Category, ProductImage, Comment
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ["name", "body"]
 
 
 class ProductForm(forms.ModelForm):
@@ -38,4 +44,9 @@ class ProductFeatureForm(forms.ModelForm):
         model = ProductFeature
         fields = ["material", "engine_type", "battery_voltage", "battery_type",
                   "number_of_speeds", "charging_time", "weight", "height"]
-    
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ["name", "body"]    

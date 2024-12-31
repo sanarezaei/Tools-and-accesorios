@@ -1,0 +1,18 @@
+{% extends "_base.html" %}
+
+{% block page_title %}Comment List{% endblock page_title %}
+
+{% block content %}
+    <h1>Comments for {{ product.name }}</h1>
+    {% for comment in comments %}
+        <li>
+            <strong>{{ comment.name }} </strong> - {{ comment.created_at }}
+            <p>{{ comment.body }}</p>
+        </li>
+    {% endfor %}
+    <button>
+        <a href="{% url "products:comment_form" product.id  %}">
+            Add to Comment
+        </a>
+    </button>
+{% endblock content %}
