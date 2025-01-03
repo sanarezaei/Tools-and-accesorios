@@ -3,21 +3,6 @@ from django.shortcuts import get_object_or_404
 from products.models import Product
 
 
-
-session = {
-    'carts': {
-        '1': {
-            'quantity': 1,
-            'total_amount': 2000
-        },
-        '2': {
-            'quantity': 5,
-            'total_amount': 10000
-        }
-    }
-}
-
-
 class Cart:
     def __init__(self, request):
         self.session = request.session
@@ -34,16 +19,12 @@ class Cart:
 
         if product.check_quantity(quantity):
 
-            # if product_id in self.cart:
-                # self.cart[product_id]['quantity'] = quantity
-
-            self.cart[product_id] = {
+            self.cart[str(product_id)] = {
                 'quantity': quantity,
-                'total_amount': product.price * quantity
+                'total_amount': float(product.price) * quantity
             }
             self.session.modified = True
 
-            print(self.cart)
             return True
         return False
 
@@ -59,15 +40,14 @@ class Cart:
 
 
     def cart_total(self):
-        pass
+        return sum(item['total_amount'] for item in self.cart.values())
 
 
     def get_quantities(self):
-        pass
+        print(f"Cart contents: {self.cart}")
+        return {product_id: item['quantity'] for product_id, item in self.cart.items()} 
 
-      
 
 def cart(request):
    return {"cart": Cart(request)}
-
 

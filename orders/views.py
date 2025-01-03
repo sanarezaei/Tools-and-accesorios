@@ -1,102 +1,53 @@
 from django.contrib import messages
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import TemplateView, View, FormView
-
 
 from .cart import Cart
 
 
-def cart_summary(request):
-    # get the cart
-    cart = Cart(request)
-    cart_products = cart.get_products
-    quantities = cart.get_quantities
-    totals = cart.cart_total()
-    return render(request, "orders/cart_summary.html", 
-                  {"cart_products": cart_products(),
-                  "quantities": quantities(),
-                  "totals": totals,
-                  })
-
-def cart_add(request):
-    # Get the cart
-    cart = Cart(request)
-    # initialize response to avoid undefined errors
-    response = {"error": "Invalid request"}
-    # test for POST
-    if request.POST.get("action") == "post":
-        # get stuff
-        product_id = int(request.POST.get("product_id"))
-        # lookup product in DB
-        product = get_object_or_404(Product, id=product_id)
-        # save to session
-        cart.add(product=product)
-        
-        # get cart quantity
-        cart_quantity = cart.__len__()
-        
-        # response = JsonResponse({"Product Name: ": product.name})
-        response = {"quantity": cart_quantity}
-    return JsonResponse(response)
-        
-def cart_delete(request):
-    cart = Cart(request)
-    
-    if request.POST.get("action") == "post":
-        #get stuff
-        product_id = int(request.POST.get("product_id"))
-        # call delete function in Cart
-        cart.delete(product=product_id)
-        
-        response = JsonResponse({"product": product_id})
-        # return redirect("cart_summary")
-        return response
-              
-def cart_update(request):
-    cart = Cart(request)
-    
-    if request.POST.get("action") == "post":
-        product_id = int(request.POST.get("product_id"))
-        product_qty = int(request.POST.get("product_qty"))
-        
-        cart.update(product=product_id, quantity=product_qty)
-        
-        response = JsonResponse({"qty": product_qty})
-        return response
-
-
-# ===========================================================================================
-
-
 class CartsView(TemplateView):
-    template_name = 'orders/carts.html'
+    template_name = 'orders/cart_summary.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         cart = Cart(self.request)
-        context['carts'] = cart.get_products()
+        context['cart_items'] = [
+            {
+                "product": product, 
+                "quantity": cart.get_quantities().get(str(product.id), 1),
+                "total_amount": cart.cart.get(str(product.id), {}).get("total_amount", 0),
+            }
+            for product in cart.get_products()
+        ]
+        context['cart_total'] = cart.cart_total()
 
         return context
 
 
 class AddToCart(View):
     def get(self, request, *args, **kwargs):
-        # product_id = request.POST.get("product_id")
         product_id = self.kwargs.get("product_id")
-        quantity = request.POST.get("quantity", 1)
+        new_quantity = int(request.POST.get("quantity", 1))
 
         cart = Cart(request)
-        result = cart.add_or_update(product_id=product_id)
+        current_quantity = cart.cart.get(str(product_id), {}).get("quantity", 0)
+        update_quantity = current_quantity + new_quantity
+        
+        result = cart.add_or_update(product_id=product_id, quantity=update_quantity)
 
         if result:
-            messages.error(request, "ezafe shod ")
+            messages.success(request, "Product added to cart successfully!")
             return redirect("orders:cart_summary")
-
-        messages.error(request, "mojod nist ")
-        return redirect("products:product_list")
+        else:
+            messages.error(request, "Product is out of stock or unavailable.")
+            return redirect("products:product_list")
+        
+        print("Redirecting to cart summary page")
+        return reverse_lazy("orders:cart_summary")
 
 
 class RemoveFromCart(View):
@@ -107,16 +58,4 @@ class RemoveFromCart(View):
         cart.delete(product_id=product_id)
 
         return redirect('orders:cart_summary')
-
-
-
-
-
-
-
-
-
-
-
-
-
+    

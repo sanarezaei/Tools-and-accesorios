@@ -3,7 +3,6 @@ from django.template.defaultfilters import slugify
 
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
-
 from autoslug import AutoSlugField
 
 import random
