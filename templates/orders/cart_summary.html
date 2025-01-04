@@ -1,5 +1,7 @@
 {% extends "_base.html" %}
 
+{% load custom_filters %}
+
 {% block content %}
 <div class="container mt-5">
     <h1>Shopping Cart</h1>
@@ -36,7 +38,7 @@
                             </form>
                             <form method="POST" action="{% url 'orders:cart_add' item.product.id %}" class="d-inline">
                                 {% csrf_token %}
-                                <input type="hidden" name="subtract" value="subtract">
+                                <input type="hidden" name="operation" value="subtract">
                                 <input type="hidden" name="quantity" value="1">
                                 <button type="submit" class="btn btn-warning btn-sm">-</button>
                             </form>
@@ -50,7 +52,6 @@
         <div class="text-end">
             <h3>Total: ${{ cart_total }}</h3>
         </div>
-
     {% else %}
         <p>Your cart is empty. <a href="{% url 'products:product_list' %}">Continue shopping</a>.</p>
     {% endif %}

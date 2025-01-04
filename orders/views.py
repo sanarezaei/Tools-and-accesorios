@@ -1,9 +1,9 @@
 from django.contrib import messages
 from django.shortcuts import render
-from django.http import JsonResponse
 from django.urls import reverse_lazy
-from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import TemplateView, View, FormView
+from django.shortcuts import redirect
+from django.views.generic import TemplateView
+from django.views import View
 
 from .cart import Cart
 
@@ -24,7 +24,6 @@ class CartsView(TemplateView):
             for product in cart.get_products()
         ]
         context['cart_total'] = cart.cart_total()
-
         return context
 
 

@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from django.db.models.functions import Abs
+
 from products.models import Product
 
 
@@ -25,7 +25,7 @@ class Cart:
         if operation == "add":
             new_quantity = current_quantity + quantity
         elif operation == "subtract":
-            new_quantity = new_quantity - Abs(quantity)
+            new_quantity = new_quantity - quantity
         else: # Default: set quantity
             new_quantity = quantity
             
