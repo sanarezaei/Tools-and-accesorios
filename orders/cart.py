@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-
+from django.db.models.functions import Abs
 from products.models import Product
 
 
@@ -14,19 +14,35 @@ class Cart:
         self.cart = cart
 
 
-    def add_or_update(self, product_id, quantity=1):
+    def add_or_update(self, product_id, quantity=1, operation='add'):
         product = get_object_or_404(Product, id=product_id)
-
-        if product.check_quantity(quantity):
-
-            self.cart[str(product_id)] = {
-                'quantity': quantity,
-                'total_amount': float(product.price) * quantity
+        product_id_str = str(product_id)
+        
+        # Determine the current quantity in the cart
+        current_quantity = self.cart.get(product_id_str, {}).get('quantity', 0)
+        
+        # Apply the operation        
+        if operation == "add":
+            new_quantity = current_quantity + quantity
+        elif operation == "subtract":
+            new_quantity = new_quantity - Abs(quantity)
+        else: # Default: set quantity
+            new_quantity = quantity
+            
+        if new_quantity > 0 and product.check_quantity(new_quantity): 
+            self.cart[product_id_str] = {
+                "quantity": new_quantity, 
+                "total_amount": float(product.price) * new_quantity,
             }
-            self.session.modified = True
+        elif new_quantity <= 0:
+            # Remove item if quantity is 0 or less
+            self.cart.pop(product_id_str, None)
+        else:
+            return False # Quantity exceeds stock
+            
+        self.session.modified = True
 
-            return True
-        return False
+        return True
 
 
     def delete(self, product_id):

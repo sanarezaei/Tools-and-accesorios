@@ -21,11 +21,24 @@
                         <td>
                             <form method="POST" action="{% url 'orders:cart_add' item.product.id %}">
                                 {% csrf_token %}
+                                <input type="hidden" name="operation" value="set">
                                 <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="form-control form-control-sm" />
+                                <button type="submit" class="btn btn-primary btn-sm mt-2">Update</button>
+                            </form>
                         </td>
                         <td>${{ item.total_amount }}</td>
                         <td>
-                                <button type="submit" class="btn btn-success btn-sm">Update</button>
+                            <form method="POST" action="{% url 'orders:cart_add' item.product.id %}" class="d-inline">
+                                {% csrf_token %}
+                                <input type="hidden" name="operation" value="add">
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" class="btn btn-success btn-sm">+</button>
+                            </form>
+                            <form method="POST" action="{% url 'orders:cart_add' item.product.id %}" class="d-inline">
+                                {% csrf_token %}
+                                <input type="hidden" name="subtract" value="subtract">
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" class="btn btn-warning btn-sm">-</button>
                             </form>
                             <a href="{% url 'orders:cart_delete' item.product.id %}" class="btn btn-danger btn-sm">Remove</a>
                         </td>

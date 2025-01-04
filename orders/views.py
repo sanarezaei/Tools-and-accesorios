@@ -31,23 +31,21 @@ class CartsView(TemplateView):
 class AddToCart(View):
     def get(self, request, *args, **kwargs):
         product_id = self.kwargs.get("product_id")
-        new_quantity = int(request.POST.get("quantity", 1))
+        quantity = int(request.POST.get("quantity", 1))
+        operation = request.POST.get("operation", "add")
 
         cart = Cart(request)
-        current_quantity = cart.cart.get(str(product_id), {}).get("quantity", 0)
-        update_quantity = current_quantity + new_quantity
-        
-        result = cart.add_or_update(product_id=product_id, quantity=update_quantity)
-
-        if result:
-            messages.success(request, "Product added to cart successfully!")
-            return redirect("orders:cart_summary")
+        if operation == "subtract":
+            result = cart.add_or_update(product_id=product_id, quantity=-quantity, operation=operation)
         else:
-            messages.error(request, "Product is out of stock or unavailable.")
-            return redirect("products:product_list")
+            result = cart.add_or_update(product_id=product_id, quantity=quantity, operation=operation)
+            
+        if result:
+            messages.success(request, "Cart updated successfully with operation: {operation}!")
+        else:
+            messages.error(request, "Unable to update cart. Product may be out of quantity.")
         
-        print("Redirecting to cart summary page")
-        return reverse_lazy("orders:cart_summary")
+        return redirect('orders:cart_summary')
 
 
 class RemoveFromCart(View):
