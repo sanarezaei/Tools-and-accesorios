@@ -48,6 +48,13 @@ class Product(models.Model):
     def check_quantity(self, number):
         return self.quantity >= number
 
+    def reduce_quantity(self, amount):
+        if amount < 0:
+            raise ValueError("Amount to reduce must be positive.")
+        
+        self.quantity -= amount
+        self.save()
+    
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)

@@ -1,0 +1,26 @@
+{% extends "_base.html" %}
+
+{% load custom_filters %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        <h3>Choose an Address:</h3>
+        <select name="address" required>
+            {% for address in addresses %}
+                <option value="{{ address.id }}">{{ address }}</option>
+            {% endfor %}
+        </select>
+
+        <h3>Cart Summary:</h3>
+        <ul>
+            {% for product in cart.get_products %}
+                <li>{{ product.name }} - {{ cart.get_quantities|get_item:product.id|stringformat:"s" }} * {{ product.price }}</li>
+            {% endfor %}
+        </ul>
+        
+        <p>Total: {{ cart.cart_total }}</p>
+
+        <button type="submit">Create Cart</button>
+    </form>
+{% endblock content %}

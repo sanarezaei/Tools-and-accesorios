@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,11 +7,41 @@
     {% block page_title %}<title></title>{% endblock page_title %}
 </head>
 <body>
-    {% for msg in messages %}
 
-        {{ msg }}
+        
+        <div>
+            <form method="post">
+                {% csrf_token %}
+                <button><a href="{% url "accounts:signup" %}">Signup</a></button>
+                <button><a href="{% url "accounts:login" %}">Login</a></button>
+                <button><a href="{% url "accounts:logout" %}">Logout</a></button>
+                <button><a href="{% url "accounts:otp_verification" %}">OTP Verification</a></button>
+                <button><a href="{% url "accounts:profile" %}">Profile</a></button>
+                <button><a href="{% url "accounts:profile_update" %}">Profile Update</a></button>
+                <button><a href="{% url "accounts:password_update" %}">Password Update</a></button>
+                <button><a href="{% url "accounts:address_list" %}">Address List</a></button>
+                <button><a href="{% url "accounts:address_create" %}">Address 
+                    Create</a></button>
+                {% comment %} <button><a href="{% url "accounts:address_update" address.id %}">Address Update</a></button> {% endcomment %}
+                {% comment %} <button><a href="{% url "accounts:address_delete" address.id %}">Address Delete</a></button> {% endcomment %}
+                <button><a href="{% url "pages:home" %}">Home</a></button>
+                <button><a href="{% url "pages:aboutus" %}">Aboutus</a></button>
+                <button><a href="{% url "products:product_list" %}">Product List</a></button>
+                <button><a href="{% url "products:product_create" %}">Product Create</a></button>
+                {% comment %} <button><a href="{% url "products:product_detail" product.id %}">Product Detail</a></button> {% endcomment %}
+                {% comment %} <button><a href="{% url "products:comment_list" product.id %}">Comment List</a></button> {% endcomment %}
+                {% comment %} <button><a href="{% url "products:comment_form" product.id %}">Comment Form</a></button> {% endcomment %}
+                <button><a href="{% url "orders:cart_summary" %}">Cart Summary</a></button>
+                {% comment %} <button><a href="{% url "orders:cart_delete" item.product.id %}">Cart Delete</a></button>  {% endcomment %}
+                <button><a href="{% url "orders:cart_update" %}">Cart Update</a></button>
+                <button type="submit"><a href="{% url "orders:create_order" %}">Create Order</a></button>
+            </form>
+        </div>
+        {% for msg in messages %}
 
-    {% endfor %}
-    {% block content %}{% endblock content %}
+            {{ msg }}
+
+        {% endfor %}
+        {% block content %}{% endblock content %}
 </body>
 </html>

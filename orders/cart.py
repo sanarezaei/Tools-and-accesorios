@@ -13,35 +13,32 @@ class Cart:
         
         self.cart = cart
 
-
-    def add_or_update(self, product_id, quantity=1, operation='add'):
-        product = get_object_or_404(Product, id=product_id)
+    def add_or_update(self, product_id, operation, quantity):
         product_id_str = str(product_id)
-        
-        # Determine the current quantity in the cart
-        current_quantity = self.cart.get(product_id_str, {}).get('quantity', 0)
-        
-        # Apply the operation        
+        product = get_object_or_404(Product, id=product_id)
+              
         if operation == "add":
-            new_quantity = current_quantity + quantity
+            new_quantity = quantity + 1
+            if product.check_quantity(new_quantity):
+                if product_id_str in self.cart:
+                    self.cart[product_id_str]["quantity"] = new_quantity
+                else:
+                    self.cart[product_id_str] = {
+                        "quantity": 1,
+                    }
+            else:
+                return False
+                   
         elif operation == "subtract":
-            new_quantity = new_quantity - quantity
-        else: # Default: set quantity
-            new_quantity = quantity
-            
-        if new_quantity > 0 and product.check_quantity(new_quantity): 
-            self.cart[product_id_str] = {
-                "quantity": new_quantity, 
-                "total_amount": float(product.price) * new_quantity,
-            }
-        elif new_quantity <= 0:
-            # Remove item if quantity is 0 or less
-            self.cart.pop(product_id_str, None)
-        else:
-            return False # Quantity exceeds stock
-            
+            if product_id_str in self.cart: 
+                self.cart[product_id_str]["quantity"] -= 1
+                if self.cart[product_id_str]["quantity"] == 0:
+                    del self.cart[product_id]
+                    
+            else: 
+                return False
+        
         self.session.modified = True
-
         return True
 
 
@@ -51,19 +48,17 @@ class Cart:
             self.session.modified = True
 
     def get_products(self):
-        print(self.cart.keys())
         return Product.objects.filter(id__in=self.cart.keys())
 
-
     def cart_total(self):
-        return sum(item['total_amount'] for item in self.cart.values())
-
+        total = 0
+        for product in self.get_products():
+            quantity = self.cart[str(product.id)]["quantity"]
+            total += quantity * product.price
+        return total
 
     def get_quantities(self):
-        print(f"Cart contents: {self.cart}")
-        return {product_id: item['quantity'] for product_id, item in self.cart.items()} 
-
-
-def cart(request):
-   return {"cart": Cart(request)}
+        return {
+            product_id: item['quantity'] for product_id, item in self.cart.items()
+        } 
 

@@ -11,4 +11,5 @@
             <button><a href="{% url "accounts:address_delete" address.id %}">Delete</a></button>
         {% endfor %}
     </ul>
+    <h3><a href="{% url "orders:create_order" %}">Create Order</a></h3>
 {% endblock content %}

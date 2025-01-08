@@ -19,20 +19,17 @@
     <!-- Product list -->
 
 
-
-{#<form action="{% url 'orders:cart_add' %}" method="post">#}
-{#{% csrf_token %}#}
-    <ul>
-        {% for product in products %}
-            <li>
-                <a href="{% url "products:product_detail" product.id %}">{{ product.name }}</a>
-                <a href="{% url 'orders:cart_add' product.id %}">Add to cart</a>
-{#                <input type="hidden" name="product_id" value="{{ product.id}}">#}
-{#                <button type="submit">Add to cart</button>#}
-            </li>
-        {% endfor %}
-    </ul>
-{#</form>#}
+    <form action="{% url "orders:cart_update" %}" method="post">
+        {% csrf_token %}
+        <ul>
+            {% for product in products %}
+                <li>
+                    <a href="{% url "products:product_detail" product.id %}">{{ product.name }}</a>
+                    <button type="submit" name="product_id" value="{{ product.id }}">Add to cart</button>
+                </li>
+            {% endfor %}
+        </ul>
+    </form>
 
 
 
