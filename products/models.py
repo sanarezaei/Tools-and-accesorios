@@ -51,7 +51,7 @@ class Product(models.Model):
     def reduce_quantity(self, amount):
         if amount < 0:
             raise ValueError("Amount to reduce must be positive.")
-        
+    
         self.quantity -= amount
         self.save()
     

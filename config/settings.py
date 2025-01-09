@@ -40,12 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
-    #internal app 
     'accounts', 
     'pages',
     'products',
     'orders',
     'mptt',
+    'azbankgateways',
 ]
 
 MIDDLEWARE = [
@@ -141,3 +141,18 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 SESSION_ENGIN = 'django.contrib.sessions.backends.db'
+
+AZ_IRANIAN_BANK_GATEWAYS = {
+   'GATEWAYS': {
+       'BMI': {
+           'MERCHANT_CODE': '<YOUR MERCHANT CODE>',
+           'TERMINAL_CODE': '<YOUR TERMINAL CODE>',
+           'SECRET_KEY': '<YOUR SECRET CODE>',
+       },
+   },
+   'DEFAULT': 'BMI',
+   'TRACKING_CODE_QUERY_PARAM': 'tc',
+   }
+
+USE_X_FORWARDER_HOST = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDER_PROTO", "https")
