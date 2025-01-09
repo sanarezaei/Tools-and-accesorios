@@ -1,7 +1,8 @@
 from django.contrib import messages
 from django.db import transaction
+from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404, render, redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
@@ -136,12 +137,6 @@ class OrderCreateView(View):
             transaction.set_rollback(True)
             messages.error(request, f"Failed to create the order: {str(e)}")    
             return redirect("orders:cart_summary") 
- 
-
-from django.http import HttpResponse, Http404
-from django.urls import reverse
-
-from azbankgateways import bankfactories, models as bank_models, default_settings as settings
 
            
 class OrderPayView(DetailView):
