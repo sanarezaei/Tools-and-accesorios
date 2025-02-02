@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.timezone import now
 
-from accounts.models import CustomUser
+from accounts.models import CustomUser, Address
 from products.models import Product
 
 import random
@@ -25,16 +25,18 @@ class Order(models.Model):
         (ORDER_STATUS_CANCELED, "Canceled"),
     ]
     code = models.PositiveIntegerField(unique=True, default=generate_random_code())
-    customer = models.ForeignKey(CustomUser, on_delete=models.PROTECT, related_name="orders")
+    customer = models.ForeignKey(CustomUser, on_delete=models.PROTECT, related_name="custom_user")
+    address = models.ForeignKey(Address, on_delete=models.CASCADE, related_name="orders")
     datetime_created = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=10, choices=ORDER_STATUS,  default=ORDER_STATUS_UNPAID)
+    order_notes = models.CharField(max_length=700, blank=True)
     
     objects = models.Manager()
     unpaid_orders = UnpaidOrderManager()
     
     def __str__(self):
         return f"Order id={self.id}"
-    
+   
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.PROTECT, related_name="items")

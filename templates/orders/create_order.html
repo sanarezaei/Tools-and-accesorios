@@ -1,48 +1,7 @@
 {% extends "_base.html" %}
 
-{% load custom_filters %}
-
 {% block content %}
-    <form method="post">
-        {% csrf_token %}
-        <h3>Choose an Address:</h3>
-        <select name="address" required>
-            {% for address in addresses %}
-                <option value="{{ address.id }}">{{ address }}</option>
-            {% endfor %}
-        </select>
-
-        <h3>Cart Summary:</h3>
-
-        <table  class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Product Price</th>
-                    <th>Quantity</th>
-                    <th>Total Amount</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-                
-            <tbody>
-                {% for item in cart_items %}
-                    <tr>
-                        <td>{{ item.product.name }}</td>
-                        <td>{{ item.product.price }}</td>
-                        <td>{{ item.quantity }}</td>
-                        <td>{{ item.total_amount }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table> 
-
-        {% if cart_items %}
-        <div>
-            <p>Total: ${{ cart_total }}</p>
-        </div>   
-        {% endif %}
-
-        <button type="submit">Pay</button>
-    </form>
-{% endblock content %}   
+    <p>Thank you for your order</p>
+    <p>Your order has been placed successfully</p>
+    
+{% endblock content %}

@@ -47,6 +47,11 @@ class Cart:
             del self.cart[product_id]
             self.session.modified = True
 
+    def clear(self):
+        if self.session.get("carts") is not None:
+            del self.session["carts"]
+            self.session.modified = True
+
     def get_products(self):
         return Product.objects.filter(id__in=self.cart.keys())
 
@@ -61,4 +66,3 @@ class Cart:
         return {
             product_id: item['quantity'] for product_id, item in self.cart.items()
         } 
-

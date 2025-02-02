@@ -28,7 +28,6 @@
                 <button><a href="{% url "products:product_create" %}">Product Create</a></button><br>
                 <button><a href="{% url "orders:cart_summary" %}">Cart Summary</a></button><br>
                 <button><a href="{% url "orders:cart_update" %}">Cart Update</a></button><br>
-                <button type="submit"><a href="{% url "orders:create_order" %}">Create Order</a></button><br>
             </form>
         </div>
         {% for msg in messages %}

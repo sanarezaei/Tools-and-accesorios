@@ -39,7 +39,7 @@ class SignUpView(FormView):
 class OTPVerificationView(FormView):
     form_class = OTPVerificationForm
     template_name = "accounts/otp_verification.html"
-    success_url = reverse_lazy("home")
+    success_url = reverse_lazy("pages:home")
     
     def get_signup_data(self):
         return self.request.session.get('signup_data', {})
